@@ -2,7 +2,7 @@
 
 This repository contains the dataset, quantitative analytical scripts, and empirical results for investigating the geopolitical narrative biases and stance drift of Chinese and American Large Language Models (LLMs) regarding the China-Pakistan Economic Corridor (CPEC). 
 
-Through a hybrid methodology combining **LLM-as-a-Judge Multi-Agent Ensemble Evaluation** and **Corpus-based Quantitative Discourse Analysis**, this project evaluates 96 bilingual experimental texts across four leading models: DeepSeek, ChatGPT, Doubao, and Gemini.
+Through a hybrid methodology combining **LLM-as-a-Judge Multi-Agent Ensemble Evaluation** and **Corpus-based Quantitative Discourse Analysis**, this project evaluates **96 bilingual experimental texts** generated from the **12 core issue-framing prompts** across four leading models: DeepSeek, ChatGPT, Doubao, and Gemini.
 
 ---
 
@@ -13,11 +13,11 @@ The files in this repository are organized as follows:
 ### 1. Code & Core Inputs
 *   **`judge.py`**: The quantitative evaluation pipeline. It reads raw texts from the consolidated database, couples them with prompts from `prompts.csv`, and invokes a multi-agent judge panel (`Qwen3-235B` & `GLM-5.1` via Paratera API) to perform blind scoring on a strict `[-1.0, 1.0]` scale with zero temperature.
 *   **`phrase.py`**: The quantitative corpus discourse scanner. It processes Chinese responses, segments texts, and calculates the absolute frequencies, proportions, and rate-standardized densities (`Density_per_1k`) for both "Chinese Official Development" and "Western Realist Security" discourse dictionaries.
-*   **`prompts.csv`**: The bilingual prompt matrix comprising 12 primary evaluation prompts mapped across 4 dimensions (Macro, Debt, Geopolitics, Local Society) and 3 induction frames (Neutral, Positive, Negative).
+*   **`prompts.csv`**: The complete evaluation prompt matrix containing all 20 designed prompts (including 12 core issue-framing prompts, 4 persona-based identity prompts, and 4 fact-value verification prompts). *Note: The quantitative experiments in this repository were conducted on the first 12 core issue-framing prompts (generating 96 bilingual responses).*
 
 ### 2. Consolidated Databases & Result Tables
 *   **`cpec_corpus_database.xlsx`**: The consolidated corpus database and replication index. This double-sheet Excel file contains:
-    *   `Sheet1`: Full texts extracted from all 96 raw responses (including paragraphs and tables) with unified metadata labels (Model, Language, Category, Frame, Word Count).
+    *   `Sheet1`: Full texts extracted from the **96 raw responses** (corresponding to the 12 core prompts across 4 models and 2 languages) with unified metadata labels (Model, Language, Category, Frame, Word Count).
     *   `Sheet2`: Direct verification web links to the original dialogs/sessions for all model replies, facilitating strict peer review and reproducibility.
 *   **`llm_judge_scores.xlsx`**: Double-sheet Excel output containing:
     *   `Raw_Scores`: Individual scores and qualitative reasoning from each judge model.
