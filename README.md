@@ -6,7 +6,7 @@ Through a hybrid methodology combining **LLM-as-a-Judge Multi-Agent Ensemble Eva
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 
 The files in this repository are organized as follows:
 
@@ -56,7 +56,7 @@ pip install python-docx openai pandas matplotlib seaborn openpyxl
 
 ---
 
-## 📈 Methodology & Key Metrics
+## Methodology & Key Metrics
 
 *   **Stance Scoring (`[-1.0, 1.0]`)**: Evaluates narrative polarity, where `-1.0` indicates extreme alignment with Western realist/security-centered framing, `0.0` represents absolute objective neutrality, and `+1.0` represents extreme alignment with Chinese developmentalist/win-win cooperative framing.
 *   **Lexical Density (`Density_per_1k`)**: To eliminate length bias (as different LLMs output varying text lengths), terminology occurrence is normalized using the formula:
