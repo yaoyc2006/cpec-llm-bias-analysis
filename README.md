@@ -16,7 +16,9 @@ The files in this repository are organized as follows:
 *   **`prompts.csv`**: The bilingual prompt matrix comprising 12 primary evaluation prompts mapped across 4 dimensions (Macro, Debt, Geopolitics, Local Society) and 3 induction frames (Neutral, Positive, Negative).
 
 ### 2. Consolidated Databases & Result Tables
-*   **`cpec_corpus_database.xlsx`**: The consolidated corpus database. It compiles full texts extracted from all 96 raw responses (handling both paragraphs and tables) alongside complete metadata labels (Model, Language, Dimension, Frame, Word Count) in a unified format.
+*   **`cpec_corpus_database.xlsx`**: The consolidated corpus database and replication index. This double-sheet Excel file contains:
+    *   `Sheet1`: Full texts extracted from all 96 raw responses (including paragraphs and tables) with unified metadata labels (Model, Language, Category, Frame, Word Count).
+    *   `Sheet2`: Direct verification web links to the original dialogs/sessions for all model replies, facilitating strict peer review and reproducibility.
 *   **`llm_judge_scores.xlsx`**: Double-sheet Excel output containing:
     *   `Raw_Scores`: Individual scores and qualitative reasoning from each judge model.
     *   `Summary_Stats`: Multi-dimensional descriptive averages (Main effects and interaction effects).
