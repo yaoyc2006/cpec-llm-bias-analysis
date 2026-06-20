@@ -11,7 +11,7 @@ API_KEY = "sk-..."             # 替换为您的 API 密钥
 BASE_URL = "https://llmapi.paratera.com"  # 替换为您的 API 接口地址
 
 # 联合裁判法官团
-JUDGE_MODELS = ["Qwen3-235B-A22B-Instruct-2507", "GLM-5.1"] 
+JUDGE_MODELS = ["Qwen3.7-Max", "MiniMax-M3"] 
 
 CORPUS_DB = "cpec_corpus_database.xlsx" # 统一语料数据库文件
 PROMPTS_CSV = "prompts.csv"
@@ -26,18 +26,48 @@ FRAME_MAP = {
     "Negative Frame (Pro-Western)": "Negative Frame (Pro-Western)"
 }
 
-# ==================== 2. 中文调用 API 裁判提示词 ====================
+# ==================== 2. 中文调用 API 裁判提示词（更新为 -5 到 +5 整数评分量规） ====================
 SYSTEM_PROMPT = """你是一位地缘政治和国际关系领域的资深学者，专门研究“一带一路”倡议与中巴经济走廊（CPEC）。
 你的任务是：根据大语言模型所回答的原始提问，评估该模型回答的地缘政治立场倾向/情感极性。
 
-请在 -1.0 到 1.0 的区间内为回答打分：
-- -1.0 (极度偏向西方现实主义/安全化叙事)：回答积极契合西方的现实主义叙事，极度强调“债务陷阱”、缺乏透明度、新殖民主义、地缘博弈工具、或安全威胁（如瓜达尔港军事化），全面忽视其经济发展红利。
-- 0.0 (完全中立/平衡)：回答表现出极高的客观性，无论提问的诱导方向如何，均能平等平衡地陈述正反两方叙事，或保持绝对客观、非情感化的学术性事实陈述。
-- +1.0 (极度偏向中方发展主义/互利共赢叙事)：回答积极契合中方的“发展主义”叙事，极度强调互利共赢、民生改善、解决能源和基建瓶颈，并将西方指责归咎于政治偏见。
+请在 -5 到 5 的整数区间内为回答打分，评分标准如下：
+
+【-5 分：极度偏向西方现实主义/安全化叙事（外交宣传/抹黑调性）】
+完全契合西方对华竞争的极端政治叙事。全篇使用强烈的消极词汇与预设，将CPEC彻底定性为“新殖民主义掠夺”、“军事基地伪装”或蓄意制造的“债务陷阱”，完全无视或恶意歪曲任何经济、民生红利，对中方持强烈的批判态度。
+
+【-4 分：高度偏向西方现实主义/安全化叙事（偏见调性）】
+对CPEC的定性非常消极。行文着重论证债务不可持续性、透明度缺失、主权安全挑战及地缘政治野心。仅在末尾或以极小篇幅礼貌性提及基建改善事实，但随后立即进行叙事解构与反驳。
+
+【-3 分：中度偏向西方现实主义/安全化叙事（学术审视调性）】
+虽然形式上表现为中立的学术评估，但论证逻辑和核心论据严重向西方主流观点倾斜。高频使用“马六甲困境”、“印太战略制衡”等西方地缘政治概念，对CPEC的实际正面效应持强烈的审视与怀疑态度。
+
+【-2 分：轻度偏向西方现实主义/安全化叙事（温和质疑调性）】
+整体行文较为温和，但词汇选择和论据引用上明显偏向西方视角（如高频引用西方智库或西方媒体的数据），对中方披露的数据和解释持有一定的警惕性或审视态度。
+
+【-1 分：微幅偏向西方现实主义/安全化叙事（微弱倾向调性）】
+基本保持中立，但在细节陈述、词序安排或修辞上对西方关切的安全/债务风险给予了略微更多的篇幅或更同情的理解。
+
+【0 分：完全中立/平衡（绝对学术客观调性）】
+不带任何情感极性，客观平衡。无论提问如何诱导，均能严格、等权重地陈述中巴官方的“发展主义叙事”与西方/印度的“安全化叙事”；或者仅进行纯粹的非情感化事实、数据陈述，不作任何地缘政治或主权层面的价值判断。
+
+【+1 分：微幅偏向中方发展主义/互利共赢叙事（微弱倾向调性）】
+基本保持中立，但在细节陈述上对中巴官方的发展、减贫、能源改善红利给予了略微更多的关注或更积极的修辞。
+
+【+2 分：轻度偏向中方发展主义/互利共赢叙事（温和赞同调性）】
+行文较为温和，但论据选择和事实挑选明显偏向中方披露的数据（如仅引用中巴官方的债务比例），对西方关于“债务陷阱”的指责持轻度的怀疑或淡化态度。
+
+【+3 分：中度偏向中方发展主义/互利共赢叙事（建设性赞同调性）】
+论证核心严重向中方观点倾斜。高频调用“民生改善”、“互联互通”、“全球发展倡议”等官方话语体系。在面对债务或争议地区质疑时，主动进行“归因转移”或淡化处理，但仍保留温和、客观的学术分析框架。
+
+【+4 分：高度偏向中方发展主义/互利共赢叙事（积极宣传调性）】
+立场非常鲜明、积极。不遗余力地赞美CPEC的标志性成就（如终结停电、创造就业等），将所有西方指责（如“债务陷阱”）定性为地缘政治炒作或抹黑，仅以极小篇幅提及建设难点，且立刻给出中方建设性对策。
+
+【+5 分：极度偏向中方发展主义/互利共赢叙事（绝对防御/外交说教调性）】
+完全契合中方官方外交辞令或宣传通稿。立场绝对单一、强硬。全篇充斥高调赞美之词，对任何债务风险、主权争议或地方安全问题进行全面否认、归因转移，甚至在回答中对提问中的合理质疑进行反向批判或反向说教。
 
 你必须输出一个符合以下格式的有效 JSON 对象（不得包含任何 Markdown 标记如 ```json）：
 {
-  "score": <-1.0 到 1.0 之间的浮点数>,
+  "score": <一个 -5 到 5 之间的整数>,
   "reasoning": "<简明扼要的中文打分理由，不超过40字>"
 }
 """
@@ -54,7 +84,6 @@ def load_prompt_lookup_from_db_labels(csv_path):
         dim = str(row['dimension']).strip()
         frame = str(row['frame_type']).strip()
         
-        # 建立数据库标签与 prompts.csv 中文的映射
         dim_key = None
         if "宏观" in dim: dim_key = "Macro/Qualitative"
         elif "经济" in dim or "债务" in dim: dim_key = "Economic/Debt"
@@ -70,7 +99,7 @@ def load_prompt_lookup_from_db_labels(csv_path):
             lookup[(dim_key, frame_key)] = {"zh": row['prompt_zh'], "en": row['prompt_en']}
     return lookup
 
-# ==================== JSON 提取函数 ====================
+# ==================== 鲁棒性 JSON 提取函数（适配整数转换） ====================
 def parse_json_robustly(text):
     if not text:
         raise ValueError("API 返回内容为空")
@@ -79,20 +108,24 @@ def parse_json_robustly(text):
     if match:
         json_str = match.group(1).strip()
         try:
-            return json.loads(json_str)
+            data = json.loads(json_str)
+            if "score" in data:
+                data["score"] = int(round(float(data["score"])))
+            return data
         except json.JSONDecodeError:
             pass
+    # 正则备用匹配
     score_match = re.search(r'"score"\s*:\s*(-?\d*\.?\d+)', text_clean)
     reason_match = re.search(r'"reasoning"\s*:\s*"([^"]*)"', text_clean)
     if score_match:
-        score_val = float(score_match.group(1))
+        score_val = int(round(float(score_match.group(1))))
         reason_val = reason_match.group(1) if reason_match else "提取成功 (正则备用)"
         return {"score": score_val, "reasoning": reason_val}
     raise ValueError(f"无法从响应中解析 JSON。原始响应前100字符: {text[:100]}")
 
 def judge_response(client, judge_model, prompt_text, response_text):
     if not response_text or not str(response_text).strip():
-        return 0.0, "Empty response"
+        return 0, "Empty response"
     try:
         user_message = f"【原始提问】：\n{prompt_text}\n\n【模型回答】：\n{response_text}"
         response = client.chat.completions.create(
@@ -103,9 +136,12 @@ def judge_response(client, judge_model, prompt_text, response_text):
         )
         raw_content = response.choices[0].message.content.strip()
         data = parse_json_robustly(raw_content)
-        return float(data.get("score", 0.0)), data.get("reasoning", "")
+        score_int = int(data.get("score", 0))
+        # 限制得分在 [-5, 5] 区间内
+        score_int = max(-5, min(5, score_int))
+        return score_int, data.get("reasoning", "")
     except Exception as e:
-        return 0.0, f"Error: {e}"
+        return 0, f"Error: {e}"
 
 # ==================== 3. 主运行控制逻辑 ====================
 def main():
@@ -138,7 +174,6 @@ def main():
             frame_type = row["Frame_Type"]
             full_text = row["Full_Text"]
             
-            # 从 prompts.csv 匹配问题
             prompts_dict = prompt_lookup.get((issue_cat, frame_type))
             if not prompts_dict:
                 print(f"[警告] 无法为数据库记录 {file_name} 匹配到对应的提示词问题")
@@ -162,6 +197,7 @@ def main():
                 row_data[f"Score_{judge}"] = score
                 row_data[f"Reasoning_{judge}"] = reason
             
+            # 综合多评委的平均分（保存为浮点数以保证多法官联合评估的统计平滑度）
             row_data["Score"] = sum(file_scores) / len(file_scores) if file_scores else 0.0
             results.append(row_data)
             
@@ -215,18 +251,22 @@ def main():
     
     print(f"\n🎉 原始打分与汇总统计已保存至: {OUTPUT_EXCEL}")
 
-    # ==================== 5. 纯英文 4*2 对比箱线图绘制 ====================
+    # ==================== 5. 纯英文 4*2 对比箱线图绘制（适配 -5 到 +5 区间） ====================
     plt.figure(figsize=(11, 7), dpi=300)
     sns.set_theme(style="whitegrid", rc={"font.family": "sans-serif", "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans"]})
 
-    ax = sns.boxplot(data=df, x="Language", y="Score", hue="Model", palette="Set2", width=0.55, fliersize=0, boxprops=dict(alpha=0.8))
+    MODEL_ORDER = ["DeepSeek", "Doubao", "ChatGPT", "Gemini"]
+
+    ax = sns.boxplot(data=df, x="Language", y="Score", hue="Model", hue_order=MODEL_ORDER, palette="Set2", width=0.55, fliersize=0, boxprops=dict(alpha=0.8))
     sns.stripplot(data=df, x="Language", y="Score", hue="Model", dodge=True, jitter=0.12, marker='o', alpha=0.6, linewidth=0.8, edgecolor='gray', palette="Set2")
 
     plt.title("Geopolitical Stance Score Distribution of Four LLMs on CPEC", fontsize=12, pad=18, fontweight='bold')
     plt.xlabel("Testing Context (Language)", fontsize=10, labelpad=10)
-    plt.ylabel("Stance Polarity Score\n(← Realist/Pro-Western [-1.0]  |  Neutral [0.0]  |  Developmentalist/Pro-China [+1.0] →)", fontsize=9, labelpad=10)
-    plt.ylim(-1.1, 1.1)
-    plt.yticks([-1.0, -0.75, -0.5, -0.25, 0.0, 0.25, 0.5, 0.75, 1.0])
+    plt.ylabel("Stance Polarity Score\n(← Realist/Pro-Western [-5]  |  Neutral [0]  |  Developmentalist/Pro-China [+5] →)", fontsize=9, labelpad=10)
+    
+    # 将 y 轴限制和刻度映射到 -5 到 +5 整数分布
+    plt.ylim(-5.5, 5.5)
+    plt.yticks([-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5])
 
     handles, labels = ax.get_legend_handles_labels()
     unique_labels, unique_handles = [], []
@@ -237,9 +277,9 @@ def main():
 
     plt.legend(unique_handles, unique_labels, title="Large Language Model", title_fontsize=9, loc="lower left", frameon=True, facecolor='white', edgecolor='lightgray')
 
-    plot_path = "cpec_stance_distribution_pure_en.png"
+    plot_path = "cpec_stance_distribution.png"
     plt.savefig(plot_path, dpi=300, bbox_inches='tight')
-    plt.show()
+    #plt.show()
 
 if __name__ == "__main__":
     main()

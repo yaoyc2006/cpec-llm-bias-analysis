@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# ==================== 1. 定义中文特征词典 ====================
+# ==================== 1. 定义中文特征词典 (已根据实证清洗) ====================
 ZH_OFFICIAL_DICT = [
     "互联互通", "民生改善", "互利共赢", "高质量发展", "共商共建", 
     "全天候战略", "命运共同体", "旗舰项目", "早期收获", "可持续发展"
@@ -29,12 +29,12 @@ def main():
     term_records = []
     model_true_word_counts = {}
 
-    print("正在从统一数据库中检索中文文本特征词频...")
+    print("🚀 正在从统一数据库中检索中文文本特征词频...")
 
     for _, row in df_db.iterrows():
         model_raw = row["Model"]
         text = str(row["Full_Text"])
-        word_count = int(row["Word_Count"]) # 直接调用数据库中预存的真实字数分母
+        word_count = int(row["Word_Count"]) # 直接调用数据库中预存的真实字数分母 [1]
         
         model_clean = MODEL_MAP.get(model_raw, model_raw)
         
@@ -81,7 +81,7 @@ def main():
     aligned_rows = []
     macro_rows = []
 
-    for model in ["DeepSeek", "ChatGPT", "Doubao", "Gemini"]:
+    for model in ["DeepSeek", "Doubao", "ChatGPT", "Gemini"]:
         print(f"\n🤖 【大语言模型: {model}】(真实生成总字数: {model_true_word_counts.get(model, 0)} 字)")
         print("=" * 86)
         
@@ -96,7 +96,7 @@ def main():
         prop_off = (hits_off / total_hits * 100) if total_hits > 0 else 0.0
         prop_real = (hits_real / total_hits * 100) if total_hits > 0 else 0.0
         
-        print("   话语体系宏观分布对比 (Macro Discourse Distribution):")
+        print("  📊 话语体系宏观分布对比 (Macro Discourse Distribution):")
         print(f"     - 中方官方发展叙事 (Chinese Official) | 总频数: {hits_off:<3} 次 | 真实密度: {rate_off:.2f}次/千字 | 话语份额占比: {prop_off:.1f}%")
         print(f"     - 西方地缘安全叙事 (Western Realist)  | 总频数: {hits_real:<3} 次 | 真实密度: {rate_real:.2f}次/千字 | 话语份额占比: {prop_real:.1f}%")
         print("  " + "-" * 82)
@@ -107,7 +107,7 @@ def main():
         df_model_detail = summary[summary["Model"] == model]
         df_model_sorted = df_model_detail.sort_values(by="Total_Hits", ascending=False)
         
-        print(f"   具体词频降序细览:")
+        print(f"  📝 具体词频降序细览:")
         print(f"  {'Rank':<8} | {'特征词汇 (Term)':<18} | {'话语类别 (Category)':<24} | {'频数 (Hits)':<10} | {'每千字频数 (Rate/1k)':<12}")
         print("  " + "-" * 78)
         
