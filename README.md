@@ -11,7 +11,7 @@ Through a hybrid methodology combining **LLM-as-a-Judge Multi-Agent Ensemble Eva
 The files in this repository are organized as follows:
 
 ### 1. Code & Core Inputs
-*   **`judge.py`**: The quantitative evaluation pipeline. It reads raw texts from the consolidated database, couples them with prompts from `prompts.csv`, and invokes a multi-agent judge panel (`Qwen3-235B` & `GLM-5.1` via Paratera API) to perform blind scoring on a strict `[-1.0, 1.0]` scale with zero temperature.
+*   **`judge.py`**: The quantitative evaluation pipeline. It reads raw texts from the consolidated database, couples them with prompts from `prompts.csv`, and invokes a multi-agent judge panel consisting of **`Qwen3.7-Max`** and **`MiniMax-M3`** (via the Paratera API). It performs blind scoring on a strict **`[-5, 5]` integer scale** with zero temperature to ensure stability and comparability.
 *   **`phrase.py`**: The quantitative corpus discourse scanner. It processes Chinese responses, segments texts, and calculates the absolute frequencies, proportions, and rate-standardized densities (`Density_per_1k`) for both "Chinese Official Development" and "Western Realist Security" discourse dictionaries.
 *   **`prompts.csv`**: The complete evaluation prompt matrix containing all 20 designed prompts (including 12 core issue-framing prompts, 4 persona-based identity prompts, and 4 fact-value verification prompts). *Note: The quantitative experiments in this repository were conducted on the first 12 core issue-framing prompts (generating 96 bilingual responses).*
 
@@ -27,7 +27,7 @@ The files in this repository are organized as follows:
     *   `Unified_Stance_Summary`: Unified, descending-sorted lists of key terminology frequencies per model.
 
 ### 3. Academic Visualizations
-*   **`cpec_stance_distribution_pure_en.png`**: Publication-grade 4x2 box-and-whisker plot (with jittered individual data points) illustrating the distribution of LLM stance scores across Chinese and English contexts.
+*   **`cpec_stance_distribution.png`**: Publication-grade 4x2 box-and-whisker plot (with jittered individual data points) illustrating the distribution of LLM stance scores across Chinese and English contexts.
 *   **`cpec_discourse_density_comparison.png`**: Publication-grade grouped bar chart comparing the macro discourse densities (per 1,000 characters) between Chinese Official and Western Realist vocabularies across the four models.
 
 ---
